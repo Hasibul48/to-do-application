@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -19,10 +18,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- AUTH SCREEN STYLES --- */
-        #authScreen {
-            background-color: #f1f5f9;
-        }
+        #authScreen { background-color: #f1f5f9; }
         .auth-card {
             background: white;
             border: 1px solid #e2e8f0;
@@ -36,14 +32,10 @@
         .auth-input:focus {
             background: #ffffff;
             border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
         }
 
-        /* --- DASHBOARD STYLES --- */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-        }
-
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
         .day-cell {
             aspect-ratio: 1 / 1;
             display: flex;
@@ -53,9 +45,7 @@
             border-radius: 12px;
             transition: all 0.2s ease;
         }
-
         .day-cell:hover { background-color: #e2e8f0; }
-        
         .day-cell.active {
             background-color: #4f46e5;
             color: white;
@@ -70,18 +60,12 @@
             cursor: pointer;
             border-radius: 28px;
         }
-
         .todo-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
             border-color: #6366f1;
         }
-
-        .completed {
-            opacity: 0.5;
-            filter: grayscale(0.8);
-            background-color: #f8fafc;
-        }
+        .completed { opacity: 0.5; filter: grayscale(0.8); background-color: #f8fafc; }
 
         @media (max-width: 768px) {
             .mobile-bottom-sheet {
@@ -92,37 +76,29 @@
                 from { transform: translateY(100%); }
                 to { transform: translateY(0); }
             }
-            .todo-card:active {
-                transform: scale(0.96);
-            }
         }
     </style>
 </head>
 <body class="antialiased pb-20 md:pb-0">
 
-    <!-- Auth Screen -->
     <div id="authScreen" class="fixed inset-0 z-[100] flex items-center justify-center px-4">
         <div class="auth-card w-full max-w-[400px] rounded-[40px] p-10 text-center">
             <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="shield-check" class="w-8 h-8"></i>
             </div>
-            
             <h2 class="text-2xl font-bold text-slate-800 mb-2">লগইন করুন</h2>
             <p class="text-slate-500 text-sm mb-8">আপনার প্রিমিয়াম ড্যাশবোর্ডে প্রবেশ করুন</p>
-            
             <div class="space-y-4 text-left">
-                <input type="email" id="authEmail" placeholder="আপনার ইমেইল" class="auth-input w-full px-6 py-4 rounded-2xl outline-none font-medium text-slate-700">
-                <input type="password" id="authPassword" placeholder="পাসওয়ার্ড" class="auth-input w-full px-6 py-4 rounded-2xl outline-none font-medium text-slate-700">
-                <button onclick="handleAuth()" id="authBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 mt-2">এগিয়ে যান</button>
+                <input type="email" id="authEmail" placeholder="আপনার ইমেইল" class="auth-input w-full px-6 py-4 rounded-2xl outline-none font-medium text-slate-700 border border-slate-100">
+                <input type="password" id="authPassword" placeholder="পাসওয়ার্ড" class="auth-input w-full px-6 py-4 rounded-2xl outline-none font-medium text-slate-700 border border-slate-100">
+                <button onclick="handleAuth()" id="authBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 mt-2 active:scale-95">এগিয়ে যান</button>
             </div>
-            <p id="authMsg" class="mt-4 text-sm font-semibold text-red-500"></p>
+            <p id="authMsg" class="mt-4 text-sm font-semibold text-red-500 leading-relaxed"></p>
         </div>
     </div>
 
-    <!-- Main App Screen -->
     <div id="appScreen" class="hidden">
         <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
-            <!-- Header -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">আমার পরিকল্পনা</h1>
@@ -139,7 +115,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                <!-- Left: Calendar -->
                 <div class="lg:col-span-4">
                     <div class="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200">
                         <div class="flex justify-between items-center mb-8">
@@ -155,45 +130,46 @@
                         <div id="calendarDays" class="calendar-grid gap-1 text-sm font-medium"></div>
                     </div>
                 </div>
-
-                <!-- Right: Tasks -->
                 <div class="lg:col-span-8">
-                    <div id="todoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <!-- Tasks injected here -->
-                    </div>
+                    <div id="todoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
                 </div>
             </div>
         </div>
-
-        <!-- Mobile FAB -->
         <button onclick="openModal()" class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center z-40 active:scale-90 transition-transform">
             <i data-lucide="plus" class="w-8 h-8"></i>
         </button>
     </div>
 
-    <!-- Modal -->
     <div id="todoModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md hidden items-end md:items-center justify-center z-[110] p-0 md:p-4">
         <div class="bg-white w-full max-w-md rounded-[32px] p-8 shadow-2xl mobile-bottom-sheet">
             <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-6 md:hidden"></div>
-            
             <h2 class="text-2xl font-bold mb-6 text-slate-800">নতুন কি করবেন?</h2>
             <div class="space-y-4">
-                <input type="text" id="taskTitle" placeholder="কাজের নাম..." 
-                    class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all">
-                
-                <textarea id="taskDesc" placeholder="বিস্তারিত বিবরণ (অপশনাল)" 
-                    class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none h-32 transition-all"></textarea>
-                
+                <input type="text" id="taskTitle" placeholder="কাজের নাম..." class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all">
+                <textarea id="taskDesc" placeholder="বিস্তারিত বিবরণ (অপশনাল)" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none h-32 transition-all resize-none"></textarea>
                 <div class="flex gap-3 pt-4 pb-6 md:pb-0">
                     <button onclick="closeModal()" class="flex-1 px-6 py-4 rounded-2xl font-semibold text-slate-500 hover:bg-slate-50 transition">বাতিল</button>
-                    <button onclick="saveTodo()" id="saveBtn" class="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-semibold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition">সেভ করুন</button>
+                    <button onclick="saveTodo()" id="saveBtn" class="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-semibold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition active:scale-95">সেভ করুন</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="resetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[120] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-md p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="key-round" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800">নতুন পাসওয়ার্ড সেট করুন</h3>
+                <p class="text-slate-500 mt-2 text-sm">কমপক্ষে ৬ অক্ষরের একটি শক্তিশালী পাসওয়ার্ড দিন</p>
+            </div>
+            <input type="password" id="newResetPassword" placeholder="নতুন পাসওয়ার্ড লিখুন" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all mb-6">
+            <button onclick="confirmPasswordReset()" id="resetSubmitBtn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95">পাসওয়ার্ড আপডেট করুন</button>
+        </div>
+    </div>
+
     <script>
-        // Supabase configuration
         const _supabaseUrl = 'https://rnkujrhjqoxvtmwcoxdy.supabase.co';
         const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJua3VqcmhqcW94dnRtd2NveGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDc2MDUsImV4cCI6MjA5Mzc4MzYwNX0.Gynk8th89uwAZGrKk0CYPL2Qx2A3T1HY8vA-JfxQf9Y';
         const sbClient = supabase.createClient(_supabaseUrl, _supabaseKey);
@@ -205,121 +181,158 @@
 
         async function init() {
             lucide.createIcons();
+            const hash = window.location.hash;
+            const isRecovery = hash.includes('type=recovery') || hash.includes('access_token');
+
+            sbClient.auth.onAuthStateChange(async (event) => {
+                if (event === "PASSWORD_RECOVERY") handleRecoveryProcess();
+            });
+
             const { data: { session } } = await sbClient.auth.getSession();
             
-            if (session) {
-                document.getElementById('authScreen').style.display = 'none';
-                document.getElementById('appScreen').classList.remove('hidden');
-                
-                const today = new Date();
-                currentYear = today.getFullYear();
-                currentMonth = today.getMonth();
-                selectedDate = today.toISOString().split('T')[0];
-                
-                // Enter key to save
-                document.getElementById('taskTitle').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') saveTodo();
-                });
-
-                renderCalendar();
-                await fetchTodos();
+            if (session && !isRecovery) {
+                showApp(session);
             } else {
-                document.getElementById('authScreen').style.display = 'flex';
-                document.getElementById('appScreen').classList.add('hidden');
+                showAuth();
+                if(isRecovery) handleRecoveryProcess();
             }
+        }
+
+        function handleRecoveryProcess() {
+            setTimeout(() => {
+                document.getElementById('resetModal').classList.replace('hidden', 'flex');
+                document.getElementById('newResetPassword').focus();
+                lucide.createIcons();
+            }, 1000);
+        }
+
+        async function confirmPasswordReset() {
+            const newPassword = document.getElementById('newResetPassword').value.trim();
+            const btn = document.getElementById('resetSubmitBtn');
+            if (newPassword.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
+            
+            btn.innerText = "আপডেট হচ্ছে...";
+            const { error } = await sbClient.auth.updateUser({ password: newPassword });
+            
+            if (error) {
+                alert("ভুল: " + error.message);
+                btn.innerText = "পাসওয়ার্ড আপডেট করুন";
+            } else {
+                alert("সফল! পাসওয়ার্ড পরিবর্তন হয়েছে।");
+                await sbClient.auth.signOut();
+                window.location.hash = "";
+                window.location.href = window.location.origin + window.location.pathname;
+            }
+        }
+
+        function showApp(session) {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appScreen').classList.remove('hidden');
+            const today = new Date();
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            selectedDate = today.toISOString().split('T')[0];
+            renderCalendar();
+            fetchTodos();
+        }
+
+        function showAuth() {
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('appScreen').classList.add('hidden');
         }
 
         async function handleAuth() {
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            const btn = document.getElementById('authBtn');
-            const msg = document.getElementById('authMsg');
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value.trim();
+    const btn = document.getElementById('authBtn');
+    const msg = document.getElementById('authMsg');
+    
+    if (!email || !password) {
+        msg.innerText = "ইমেইল এবং পাসওয়ার্ড দিন!";
+        return;
+    }
+    
+    btn.innerText = "অপেক্ষা করুন...";
+    btn.disabled = true;
+    msg.innerText = "";
+
+    // প্রথমে লগইন করার চেষ্টা করি
+    const { data, error: signInError } = await sbClient.auth.signInWithPassword({ email, password });
+    
+    if (signInError) {
+        // যদি লগইন ফেল করে এবং এরর মেসেজ হয় 'Invalid login credentials'
+        if (signInError.message.toLowerCase().includes("invalid login credentials")) {
             
-            if (!email || !password) return;
-            btn.innerText = "অপেক্ষা করুন...";
-            msg.innerText = "";
-            
-            // First try to login
-            const { error: signInError } = await sbClient.auth.signInWithPassword({ email, password });
-            
-            if (signInError) {
-                // If login fails, try to register
-                const { data: signUpData, error: signUpError } = await sbClient.auth.signUp({ email, password });
-                
-                if (signUpError) { 
-                    msg.innerText = "ভুল: " + signUpError.message; 
-                    btn.innerText = "এগিয়ে যান"; 
-                } else { 
-                    // Registration successful. If email confirm is OFF, try logging in again to establish session.
-                    const { error: retryLoginError } = await sbClient.auth.signInWithPassword({ email, password });
-                    if(!retryLoginError) {
-                        location.reload();
-                    } else {
-                        msg.innerText = "অ্যাকাউন্ট তৈরি হয়েছে, আবার ক্লিক করুন!";
-                        btn.innerText = "এগিয়ে যান";
-                    }
+            // নতুন অ্যাকাউন্ট তৈরির চেষ্টা করি (যেহেতু লগইন হয়নি)
+            const { data: signUpData, error: signUpError } = await sbClient.auth.signUp({ email, password });
+
+            if (signUpError) {
+                // যদি ইমেইল আগে থেকেই থাকে কিন্তু পাসওয়ার্ড ভুল হয়
+                if (signUpError.message.toLowerCase().includes("already registered")) {
+                    msg.innerHTML = `পাসওয়ার্ড ভুল! <button onclick="sendResetLink('${email}')" class="text-indigo-600 underline font-bold ml-1">পাসওয়ার্ড ভুলে গেছেন?</button>`;
+                } else {
+                    msg.innerText = "ভুল: " + signUpError.message;
                 }
-            } else { 
-                location.reload(); 
+            } else {
+                // অ্যাকাউন্ট তৈরি সফল হলে সরাসরি অ্যাপে নিয়ে যাবে (যেহেতু ইমেইল ভেরিফিকেশন অফ করা)
+                if (signUpData.user) {
+                    location.reload(); 
+                }
             }
+        } else {
+            msg.innerText = "ভুল: " + signInError.message;
+        }
+        btn.innerText = "এগিয়ে যান";
+        btn.disabled = false;
+    } else { 
+        // লগইন সফল হলে সরাসরি রিলোড
+        location.reload(); 
+    }
+}
+
+        async function sendResetLink(email) {
+            const msg = document.getElementById('authMsg');
+            msg.innerText = "লিঙ্ক পাঠানো হচ্ছে...";
+            const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname,
+            });
+            if (error) msg.innerText = "ভুল: " + error.message;
+            else msg.innerHTML = "<span class='text-green-600 font-bold'>ইমেইল চেক করুন! রিসেট লিঙ্ক পাঠানো হয়েছে।</span>";
         }
 
         async function fetchTodos() {
-            const { data, error } = await sbClient.from('todos').select('*').order('created_at', { ascending: false });
+            const { data } = await sbClient.from('todos').select('*').order('created_at', { ascending: false });
             if (data) {
-                todos = data.map(t => ({ 
-                    id: t.id, 
-                    title: t.title, 
-                    desc: t.description, 
-                    date: t.task_date, 
-                    completed: t.is_completed 
-                }));
+                todos = data.map(t => ({ id: t.id, title: t.title, desc: t.description, date: t.task_date, completed: t.is_completed }));
                 renderTodos();
             }
         }
 
         async function saveTodo() {
-            const titleInput = document.getElementById('taskTitle');
-            const descInput = document.getElementById('taskDesc');
-            const btn = document.getElementById('saveBtn');
-            
-            if (!titleInput.value.trim()) return;
-            
-            const originalText = btn.innerText;
-            btn.innerText = "সেভ হচ্ছে...";
-
-            const { error } = await sbClient.from('todos').insert([{ 
-                title: titleInput.value.trim(), 
-                description: descInput.value.trim(), 
-                task_date: selectedDate, 
-                is_completed: false 
-            }]);
-            
+            const title = document.getElementById('taskTitle').value.trim();
+            const desc = document.getElementById('taskDesc').value.trim();
+            if (!title) return;
+            document.getElementById('saveBtn').innerText = "সেভ হচ্ছে...";
+            const { error } = await sbClient.from('todos').insert([{ title, description: desc, task_date: selectedDate, is_completed: false }]);
             if(!error) {
-                titleInput.value = '';
-                descInput.value = '';
-                closeModal();
+                document.getElementById('taskTitle').value = ''; 
+                document.getElementById('taskDesc').value = ''; 
+                closeModal(); 
                 await fetchTodos();
             }
-            btn.innerText = originalText;
+            document.getElementById('saveBtn').innerText = "সেভ করুন";
         }
 
         async function toggleTodo(id) {
             const todo = todos.find(t => t.id === id);
-            // Optimistic UI update
             todo.completed = !todo.completed;
             renderTodos(); 
-            
-            // Background sync
             await sbClient.from('todos').update({ is_completed: todo.completed }).eq('id', id);
         }
 
         async function deleteTodo(id) {
-            // Optimistic UI update
             todos = todos.filter(t => t.id !== id);
             renderTodos();
-            
-            // Background sync
             await sbClient.from('todos').delete().eq('id', id);
         }
 
@@ -327,16 +340,10 @@
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
             const firstDay = new Date(currentYear, currentMonth, 1).getDay(); 
             const calendarDays = document.getElementById('calendarDays');
-            const monthLabel = document.getElementById('monthLabel');
-            
             const monthNames = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-            monthLabel.innerText = `${monthNames[currentMonth]} ${currentYear}`;
-            
+            document.getElementById('monthLabel').innerText = `${monthNames[currentMonth]} ${currentYear}`;
             calendarDays.innerHTML = '';
-            for (let i = 0; i < firstDay; i++) {
-                calendarDays.innerHTML += '<div></div>';
-            }
-
+            for (let i = 0; i < firstDay; i++) calendarDays.innerHTML += '<div></div>';
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const isActive = dateStr === selectedDate ? 'active' : '';
@@ -344,16 +351,11 @@
             }
         }
 
-        function selectDate(date) {
-            selectedDate = date;
-            renderCalendar();
-            renderTodos();
-        }
-
+        function selectDate(date) { selectedDate = date; renderCalendar(); renderTodos(); }
         function changeMonth(dir) {
             currentMonth += dir;
             if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            else if (currentMonth < 0) { currentMonth = 11; currentYear--; }
             renderCalendar();
         }
 
@@ -361,65 +363,41 @@
             const container = document.getElementById('todoContainer');
             const filtered = todos.filter(t => t.date === selectedDate);
             container.innerHTML = '';
-
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('currentDisplayDate').innerText = new Date(selectedDate).toLocaleDateString('bn-BD', dateOptions);
+            document.getElementById('currentDisplayDate').innerText = new Date(selectedDate).toLocaleDateString('bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full py-20 text-center bg-white/50 rounded-[32px] border-2 border-dashed border-slate-200">
-                        <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto text-slate-300 mb-4"></i>
-                        <p class="text-slate-400 font-medium text-sm">এই তারিখে কোনো কাজ নেই!</p>
-                    </div>`;
+                container.innerHTML = `<div class="col-span-full py-20 text-center bg-white/50 rounded-[32px] border-2 border-dashed border-slate-200">
+                    <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto text-slate-300 mb-4"></i>
+                    <p class="text-slate-400 font-medium text-sm">এই তারিখে কোনো কাজ নেই!</p>
+                </div>`;
             } else {
                 filtered.forEach(todo => {
-                    // ID ভিত্তিক একটি নির্দিষ্ট রঙ এবং আইকন জেনারেট করা হচ্ছে, যেন রিফ্রেশ দিলেও পরিবর্তন না হয়।
-                    const cIndex = todo.id % colors.length;
-                    const iIndex = todo.id % icons.length;
-                    const tColor = colors[cIndex];
-                    const tIcon = icons[iIndex];
-
+                    const cIndex = Math.abs(todo.id % colors.length);
+                    const iIndex = Math.abs(todo.id % icons.length);
                     const card = document.createElement('div');
                     card.className = `todo-card p-6 flex gap-4 items-start ${todo.completed ? 'completed' : ''}`;
-                    card.onclick = (e) => {
-                        if(!e.target.closest('button')) toggleTodo(todo.id);
-                    };
-                    
+                    card.onclick = (e) => { if(!e.target.closest('button')) toggleTodo(todo.id); };
                     card.innerHTML = `
-                        <div class="p-3 rounded-2xl flex-shrink-0" style="background-color: ${tColor}15; color: ${tColor}">
-                            <i data-lucide="${tIcon}" class="w-6 h-6"></i>
+                        <div class="p-3 rounded-2xl flex-shrink-0" style="background-color: ${colors[cIndex]}15; color: ${colors[cIndex]}">
+                            <i data-lucide="${icons[iIndex]}" class="w-6 h-6"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-slate-800 truncate ${todo.completed ? 'line-through' : ''}">${todo.title}</h4>
-                            <p class="text-sm text-slate-500 mt-1 line-clamp-2">${todo.desc || 'কোনো বিবরণ নেই'}</p>
+                            <p class="text-sm text-slate-500 mt-1 line-clamp-2">${todo.desc || 'বিবরণ নেই'}</p>
                         </div>
                         <button onclick="deleteTodo(${todo.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
                             <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
-                    `;
+                        </button>`;
                     container.appendChild(card);
                 });
             }
             lucide.createIcons();
         }
 
-        function openModal() { 
-            const modal = document.getElementById('todoModal');
-            modal.style.display = 'flex';
-            // ৩ মিলি সেকেন্ড পর অটো ফোকাস হবে
-            setTimeout(() => { document.getElementById('taskTitle').focus(); }, 300);
-        }
+        function openModal() { document.getElementById('todoModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('todoModal').style.display = 'none'; }
+        async function logout() { await sbClient.auth.signOut(); window.location.hash = ""; location.reload(); }
 
-        function closeModal() { 
-            document.getElementById('todoModal').style.display = 'none'; 
-        }
-
-        async function logout() { 
-            await sbClient.auth.signOut(); 
-            location.reload(); 
-        }
-
-        // Start App
         init();
     </script>
 </body>
