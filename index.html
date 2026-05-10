@@ -396,7 +396,15 @@
             lucide.createIcons();
         }
 
-        function openModal() { document.getElementById('todoModal').style.display = 'flex'; }
+        function openModal() { 
+            const modal = document.getElementById('todoModal');
+            modal.style.display = 'flex'; 
+            
+            // সামান্য ডিলে দিয়ে ফোকাস করা হয়েছে যাতে অ্যানিমেশন স্মুথ থাকে
+            setTimeout(() => {
+                document.getElementById('taskTitle').focus();
+            }, 100);
+        }
         function closeModal() { document.getElementById('todoModal').style.display = 'none'; }
         async function logout() { await sbClient.auth.signOut(); window.location.hash = ""; location.reload(); }
 
