@@ -360,7 +360,7 @@
             renderCalendar();
         }
 
-        function renderTodos() {
+       function renderTodos() {
             const container = document.getElementById('todoContainer');
             const filtered = todos.filter(t => t.date === selectedDate);
             container.innerHTML = '';
@@ -376,6 +376,7 @@
                     const cIndex = Math.abs(todo.id % colors.length);
                     const iIndex = Math.abs(todo.id % icons.length);
                     const card = document.createElement('div');
+                    // 'items-start' রাখা হয়েছে যাতে টেক্সট বড় হলেও আইকন উপরে থাকে
                     card.className = `todo-card p-6 flex gap-4 items-start ${todo.completed ? 'completed' : ''}`;
                     card.onclick = (e) => { if(!e.target.closest('button')) toggleTodo(todo.id); };
                     card.innerHTML = `
@@ -383,10 +384,10 @@
                             <i data-lucide="${icons[iIndex]}" class="w-6 h-6"></i>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="font-bold text-slate-800 truncate ${todo.completed ? 'line-through' : ''}">${todo.title}</h4>
-                            <p class="text-sm text-slate-500 mt-1 line-clamp-2">${todo.desc || 'বিবরণ নেই'}</p>
+                            <h4 class="font-bold text-slate-800 break-words ${todo.completed ? 'line-through' : ''}">${todo.title}</h4>
+                            <p class="text-sm text-slate-500 mt-1 break-words">${todo.desc || 'বিবরণ নেই'}</p>
                         </div>
-                        <button onclick="deleteTodo(${todo.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                        <button onclick="deleteTodo(${todo.id})" class="p-2 text-slate-300 hover:text-red-500 transition-colors flex-shrink-0">
                             <i data-lucide="trash-2" class="w-5 h-5"></i>
                         </button>`;
                     container.appendChild(card);
